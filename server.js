@@ -18,6 +18,7 @@ const {PORT} = require('./config')
 
 const app = express();
 app.use(express.static('public'));
+app.use(express.json());
 
 app.use(function (req,res,next) {
   console.log('Time:',Date(),req.method,req.url)
@@ -26,6 +27,16 @@ app.use(function (req,res,next) {
 
 
 // Using the GET METHOD
+app.get('/api/notes',(req,res,next)=>{
+  const {searchTerm} = req.query;
+  notes.filter(searchTerm, (err, list) => {
+    if (err) {
+      return next(err);
+    }
+    console.log(list);
+    res.json(list)
+  });
+})
 
 app.get('/api/notes/:id', function (req, res) {
   console.log(req.params)
@@ -43,16 +54,7 @@ app.get('/api/notes/:id', function (req, res) {
   });
 })
 
-app.get('/api/notes',(req,res,next)=>{
-  const {searchTerm} =req.query;
-  notes.filter('cats', (err, list) => {
-    if (err) {
-      return next(err);
-    }
-    console.log(list);
-    res.json(list)
-  });
-})
+
 // app.get('/api/notes/', (req, res) => {
 //   //http://localhost:8080/api/notes/?searchTerm=cats
 //   const searchTerm = req.query.searchTerm;
@@ -65,6 +67,31 @@ app.get('/api/notes',(req,res,next)=>{
 // app.get('/boom', (req, res, next) => {
 //   throw new Error('Boom!!');
 // });
+
+app.put('/api/notes/:id', (req, res, next) => {
+  const id = req.params.id;
+
+  /***** Never trust users - validate input *****/
+  const updateObj = {};
+  const updateFields = ['title', 'content'];
+
+  updateFields.forEach(field => {
+    if (field in req.body) {
+      updateObj[field] = req.body[field];
+    }
+  });
+
+  notes.update(id, updateObj, (err, item) => {
+    if (err) {
+      return next(err);
+    }
+    if (item) {
+      res.json(item);
+    } else {
+      next();
+    }
+  });
+});
 //Listen for Error-Handling Middleware
 app.use(function (req, res, next) {
   var err = new Error('Not Found');
