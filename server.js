@@ -8,6 +8,8 @@
 // INSERT EXPRESS APP CODE HERE...
 const express = require('express');
 
+const morgan = require('morgan');
+
 const data = require('./db/notes');
 
 const simDB = require('./db/simDB');
@@ -17,6 +19,8 @@ const notes = simDB.initialize(data);
 const {PORT} = require('./config')
 
 const app = express();
+// Log all requests
+app.use(morgan('dev'));
 app.use(express.static('public'));
 app.use(express.json());
 
