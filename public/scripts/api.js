@@ -17,7 +17,6 @@ const api = {
       type: 'GET',
       dataType: 'json',
       url: `/api/notes/${id}`,
-      success: callback
     });
   },
 
@@ -28,7 +27,6 @@ const api = {
       contentType: 'application/json',
       dataType: 'json',
       data: JSON.stringify(obj),
-      success: callback
     });
   },
 
@@ -40,7 +38,6 @@ const api = {
       dataType: 'json',
       processData: false,
       data: JSON.stringify(obj),
-      success: callback
     });
   },
 
@@ -49,7 +46,6 @@ const api = {
       type: 'DELETE',
       url: `/api/notes/${id}`,
       dataType: 'json',
-      success: callback
     });
   }
   
