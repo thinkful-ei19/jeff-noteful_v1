@@ -27,7 +27,7 @@ app.use(function (req, res, next) {
   err.status = 404;
   next(err);
 });
-
+////
 // Catch-all Error handler
 // NOTE: we'll prevent stacktrace leak in later exercise
 app.use(function (err, req, res, next) {
